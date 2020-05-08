@@ -1,0 +1,82 @@
+function mytestEmail () {
+  
+  var app = SpreadsheetApp;
+  app.getActiveSpreadsheet().getSheetByName("basic").activate();
+  var sheet = app.getActiveSpreadsheet().getActiveSheet();
+  var lr = sheet.getLastRow();
+  var now = new Date();
+  for (var i=2; i<=lr;i++) {
+  var jug = sheet.getRange(i, 4);
+  var jug2 = sheet.getRange(i, 5);
+    if (jug == "" && jug2 == "") {
+          var cemail = sheet.getRange(i, 1).getValue(); 
+          var clas = sheet.getRange(i, 3).getValue();
+          var cname = sheet.getRange(i, 2).getValue();
+          var info ={name: cname, title:clas,time:now};
+          var subjectline = "reminder your " + clas;
+          var messageBody = templetMessage(info);
+         sheet.getRange(i, 4).setValue("email sent @ " + now); 
+         MailApp.sendEmail(cemail, subjectline, messageBody);
+      
+    
+   } //close if
+   
+  
+    else if (jug2 == ""){var cemail = sheet.getRange(i, 1).getValue(); 
+          var clas = sheet.getRange(i, 3).getValue();
+          var cname = sheet.getRange(i, 2).getValue();
+          var info ={name: cname, title:clas,time:now};
+          var subjectline = "second reminder your " + clas;
+          var messageBody = templetMessage1(info);
+         sheet.getRange(i, 5).setValue("second email sent @ " + now); 
+         MailApp.sendEmail(cemail, subjectline, messageBody);
+      
+      
+      
+       } //close else if
+  
+      }//close for
+  
+  
+    }//close function
+
+
+function templetMessage(obj){
+  
+  var app = SpreadsheetApp;
+  
+  var tempSheet = app.getActiveSpreadsheet().getSheetByName("temp");
+  var lc = tempSheet.getLastColumn();
+  var cn = tempSheet.getRange(1, 1, 1, lc).getValues()[0].indexOf("first_follow_up")+1;
+
+  var templetext = tempSheet.getRange(2, cn).getValue();
+  var messageBody = templetext;
+
+
+  for (let [key,val] of Object.entries(obj)){
+           
+             messageBody  = messageBody.replace ("{" + key + "}",val);}
+  
+  
+  return messageBody; }//close function
+
+
+
+function templetMessage1(obj){
+  
+  var app = SpreadsheetApp;
+  
+  var tempSheet = app.getActiveSpreadsheet().getSheetByName("temp");
+  var lc = tempSheet.getLastColumn();
+  var cn = tempSheet.getRange(1, 1, 1, lc).getValues()[0].indexOf("second_follow_up")+1;
+
+  var templetext1 = tempSheet.getRange(2, cn).getValue();
+  var messageBody1 = templetext1;
+
+
+  for (let [key,val] of Object.entries(obj)){
+           
+             messageBody1 = messageBody1.replace ("{" + key + "}",val);}
+  
+  
+  return messageBody1; } //close function
