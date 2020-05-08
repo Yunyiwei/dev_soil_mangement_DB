@@ -1,0 +1,60 @@
+// auto creat client id  & creat date by fill the client name
+
+function onEdit() {
+
+var app = SpreadsheetApp;
+  
+var sheet = app.getActiveSpreadsheet().getSheetByName("client");
+
+// define last row 
+var lr =sheet.getLastRow()+1;
+  
+// define last colum
+  
+var lc = sheet.getLastColumn();
+  
+// find key creat_date colum number 
+  
+var cd = sheet.getRange(1, 1, 1, lc).getValues()[0].indexOf("creat_date")+1;
+
+  
+// find key client_name colum number
+
+var cn = sheet.getRange(1, 1, 1, lc).getValues()[0].indexOf("Client_name")+1;
+  
+// find key client_id colum number
+  
+var ci = sheet.getRange(1, 1, 1, lc).getValues()[0].indexOf("Client_id")+1;
+  
+// for loop 
+ 
+  for (var i=2; i< lr; i++) {
+    // if the client name is blank 
+    
+    if (sheet.getRange(i, cn).getValue() != "") {
+      var j = i+99;
+      var now = new Date();
+      // creat client ID ( C-solum-99+rownumber);
+      sheet.getRange(i,ci).setValue("C-"+"solum-" + j);
+      sheet.getRange(i,cd).setValue(now);
+    
+    }// close if
+    
+    else {
+      
+      // if the clent_name  is blank, delet all the content in array
+      
+      for (var h=1; h<lc+1;h++){  
+      
+      sheet.getRange(i, h).clearContent();
+        
+      }
+       
+    
+    }//close else
+  
+ 
+  }//close for 
+  
+  
+}// close function
